@@ -3,7 +3,7 @@ module.exports = (app) => {
   app.use("/tastes", tastesRoutes);
 
   const productRoutes = require("./productTypes.routes");
-  app.use("/products", productRoutes);
+  app.use("/productTypes", productRoutes);
 
   const categorieRoutes = require("./categories.routes");
   app.use("/categories", categorieRoutes);

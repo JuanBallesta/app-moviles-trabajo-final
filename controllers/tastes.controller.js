@@ -1,19 +1,29 @@
 const db = require("../models/index.model");
-const taste = db.iceCreamTastes;
+const IceCreamTaste = db.iceCreamTastes;
 
 // Crear un nuevo gusto de helado.
 exports.createTaste = (req, res) => {
-  const { tasteName, ingredients, shortDescription, nutritionalValue, photos } =
-    req.body;
-
-  taste
-    .create({
-      tasteName: tasteName,
-      ingredients: ingredients,
-      shortDescription: shortDescription,
-      nutritionalValue: nutritionalValue,
-      photos: photos,
-    })
+  const {
+    taste,
+    ingredients,
+    shortDescription,
+    nutritionalValue,
+    photos,
+    stock,
+    categorie,
+    productType,
+  } = req.body;
+  console.log(req.body);
+  IceCreamTaste.create({
+    taste: taste,
+    ingredients: ingredients,
+    shortDescription: shortDescription,
+    nutritionalValue: nutritionalValue,
+    photos: photos,
+    stock: stock,
+    categoryId: categorie,
+    productTypeId: productType,
+  })
     .then((register) => {
       res.status(201).json({
         ok: true,
@@ -34,8 +44,16 @@ exports.createTaste = (req, res) => {
 
 // Obtener todos los gustos de helado.
 exports.getAllTastes = (req, res) => {
-  taste
-    .findAll()
+  IceCreamTaste.findAll({
+    include: [
+      {
+        model: db.categories,
+      },
+      {
+        model: db.productTypes,
+      },
+    ],
+  })
     .then((tastes) => {
       res.status(200).json({
         ok: true,
@@ -57,10 +75,9 @@ exports.getAllTastes = (req, res) => {
 // Obtener un gusto de helado.
 exports.getOneTaste = (req, res) => {
   const id = req.params.id;
-  taste
-    .findOne({
-      where: { id: id },
-    })
+  IceCreamTaste.findOne({
+    where: { id: id },
+  })
     .then((tasteData) => {
       if (!tasteData) {
         return res.status(404).json({
@@ -89,23 +106,33 @@ exports.getOneTaste = (req, res) => {
 // Actualizar un gusto de helado.
 exports.updateTaste = (req, res) => {
   const id = req.params.id;
-  const { tasteName, ingredients, shortDescription, nutritionalValue, photos } =
-    req.body;
+  const {
+    taste,
+    ingredients,
+    shortDescription,
+    nutritionalValue,
+    photos,
+    stock,
+    categorie,
+    productType,
+  } = req.body;
 
-  taste
-    .update(
-      {
-        tasteName: tasteName,
-        ingredients: ingredients,
-        shortDescription: shortDescription,
-        nutritionalValue: nutritionalValue,
-        photos: photos,
-      },
-      {
-        where: { id: id },
-        returning: true,
-      }
-    )
+  IceCreamTaste.update(
+    {
+      taste: taste,
+      ingredients: ingredients,
+      shortDescription: shortDescription,
+      nutritionalValue: nutritionalValue,
+      photos: photos,
+      stock: stock,
+      categoryId: categorie,
+      productTypeId: productType,
+    },
+    {
+      where: { id: id },
+      returning: true,
+    }
+  )
     .then(([affectedCount, affectedRows]) => {
       if (affectedCount === 0) {
         return res.status(404).json({
@@ -135,8 +162,7 @@ exports.updateTaste = (req, res) => {
 exports.deleteTaste = (req, res) => {
   const id = req.params.id;
 
-  taste
-    .destroy({ where: { id: id } })
+  IceCreamTaste.destroy({ where: { id: id } })
     .then((rowsDeleted) => {
       if (rowsDeleted > 0) {
         res.status(200).json({

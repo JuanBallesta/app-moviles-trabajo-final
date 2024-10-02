@@ -2,7 +2,7 @@ module.exports = (sequelize, Sequelize) => {
   const { DataTypes } = Sequelize;
   const taste = sequelize.define("iceCreamTastes", {
     taste: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
     ingredients: {
@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true,
     },
     shortDescription: {
-      type: DataTypes.STRING(40),
+      type: DataTypes.STRING(100),
       allowNull: true,
     },
     nutritionalValue: {
@@ -18,8 +18,12 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true,
     },
     photos: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING(100),
       allowNull: true,
+    },
+    stock: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
   });
 

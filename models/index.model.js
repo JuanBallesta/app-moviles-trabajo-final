@@ -21,8 +21,6 @@ db.sequelize = sequelize;
 db.iceCreamTastes = require("./tastes.model")(sequelize, Sequelize);
 db.productTypes = require("./productTypes.model")(sequelize, Sequelize);
 db.categories = require("./categories.model")(sequelize, Sequelize);
-db.productTypesHasIceCreamTastes =
-  require("./productTypesHasIceCreamTastes.model")(sequelize, Sequelize);
 db.carts = require("./carts.model.js")(sequelize, Sequelize);
 db.productHasCart = require("./productHasCart.model.js")(sequelize, Sequelize);
 
@@ -33,15 +31,13 @@ db.categories.hasMany(db.iceCreamTastes);
 db.iceCreamTastes.belongsTo(db.categories);
 
 // Un gusto de helado puede estar en muchos tipos de producto, y un producto puede tener muchos gustos de helados.
-db.iceCreamTastes.hasMany(db.productTypesHasIceCreamTastes);
-db.productTypes.hasMany(db.productTypesHasIceCreamTastes);
-db.productTypesHasIceCreamTastes.belongsTo(db.iceCreamTastes);
-db.productTypesHasIceCreamTastes.belongsTo(db.productTypes);
+db.productTypes.hasMany(db.iceCreamTastes);
+db.iceCreamTastes.belongsTo(db.productTypes);
 
 // Un producto puede estar muchos carritos, y un carrito puede tener muchos productos.
-db.productTypesHasIceCreamTastes.hasMany(db.productHasCart);
+db.iceCreamTastes.hasMany(db.productHasCart);
 db.carts.hasMany(db.productHasCart);
-db.productHasCart.belongsTo(db.productTypesHasIceCreamTastes);
+db.productHasCart.belongsTo(db.iceCreamTastes);
 db.productHasCart.belongsTo(db.carts);
 
 module.exports = db;
