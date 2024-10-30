@@ -1,3 +1,4 @@
+const { Op, where, and } = require("sequelize");
 const db = require("../models/index.model");
 const IceCreamTaste = db.iceCreamTastes;
 
@@ -53,6 +54,75 @@ exports.getAllTastes = (req, res) => {
         model: db.productTypes,
       },
     ],
+  })
+    .then((tastes) => {
+      res.status(200).json({
+        ok: true,
+        msg: "Lista de gustos de helado.",
+        status: 200,
+        data: tastes,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        ok: false,
+        msg: "Error al obtener los gustos de helado.",
+        status: 500,
+        data: error,
+      });
+    });
+};
+
+exports.list = (req, res) => {
+  const pagina = parseInt(req.query.pagina);
+  const cantidad = parseInt(req.query.cantidad);
+  const text = req.query.text;
+  const categories = parseInt(req.query.categories);
+  const productTypes = parseInt(req.query.productTypes);
+
+  console.log("llega a lista", pagina, cantidad);
+
+  let whereFilter = {};
+
+  if (
+    (text && text.length > 0) ||
+    (categories && categories.length > 0) ||
+    (productTypes && productTypes.length > 0)
+  ) {
+    whereFilter[(Op, and)] = [];
+
+    if (text && text.length > 0) {
+      whereFilter[(Op, and)].push({
+        taste: { [Op.like]: `&${text}&` },
+      });
+    }
+
+    if (categories && categories.length > 0) {
+      const categoriesVector = categories.split(",");
+      whereFilter[(Op, and)].push({
+        categoryId: categoriesVector,
+      });
+    }
+
+    if (productTypes && productTypes.length > 0) {
+      const productTypesVector = productTypes.split(",");
+      whereFilter[(Op, and)].push({
+        productTypeId: productTypesVector,
+      });
+    }
+  }
+  IceCreamTaste.findAndCountAll({
+    where: whereFilter,
+    include: [
+      {
+        model: db.categories,
+      },
+      {
+        model: db.productTypes,
+      },
+    ],
+    offset: (pagina - 1) * cantidad,
+    limit: cantidad,
   })
     .then((tastes) => {
       res.status(200).json({
