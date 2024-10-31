@@ -73,14 +73,15 @@ exports.getAllTastes = (req, res) => {
     });
 };
 
+// Filtros
 exports.list = (req, res) => {
   const pagina = parseInt(req.query.pagina);
   const cantidad = parseInt(req.query.cantidad);
-  const text = req.query.text;
-  const categories = parseInt(req.query.categories);
-  const productTypes = parseInt(req.query.productTypes);
+  const text = req.query.filtro;
+  const categories = req.query.categories;
+  const productTypes = req.query.productTypes;
 
-  console.log("llega a lista", pagina, cantidad);
+  console.log("llega a lista", productTypes);
 
   let whereFilter = {};
 
@@ -89,24 +90,24 @@ exports.list = (req, res) => {
     (categories && categories.length > 0) ||
     (productTypes && productTypes.length > 0)
   ) {
-    whereFilter[(Op, and)] = [];
+    whereFilter[Op.and] = [];
 
     if (text && text.length > 0) {
-      whereFilter[(Op, and)].push({
-        taste: { [Op.like]: `&${text}&` },
+      whereFilter[Op.and].push({
+        taste: { [Op.like]: `%${text}%` },
       });
     }
 
     if (categories && categories.length > 0) {
       const categoriesVector = categories.split(",");
-      whereFilter[(Op, and)].push({
+      whereFilter[Op.and].push({
         categoryId: categoriesVector,
       });
     }
 
     if (productTypes && productTypes.length > 0) {
       const productTypesVector = productTypes.split(",");
-      whereFilter[(Op, and)].push({
+      whereFilter[Op.and].push({
         productTypeId: productTypesVector,
       });
     }
@@ -133,6 +134,7 @@ exports.list = (req, res) => {
       });
     })
     .catch((error) => {
+      console.log(error);
       res.status(500).json({
         ok: false,
         msg: "Error al obtener los gustos de helado.",
