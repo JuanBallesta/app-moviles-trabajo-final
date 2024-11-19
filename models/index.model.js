@@ -23,6 +23,8 @@ db.productTypes = require("./productTypes.model")(sequelize, Sequelize);
 db.categories = require("./categories.model")(sequelize, Sequelize);
 db.carts = require("./carts.model.js")(sequelize, Sequelize);
 db.productHasCart = require("./productHasCart.model.js")(sequelize, Sequelize);
+db.users = require("./users.model")(sequelize, Sequelize);
+db.cupons = require("./cupons.model")(sequelize, Sequelize);
 
 // Relaciones entre modelos
 

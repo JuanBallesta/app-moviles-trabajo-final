@@ -10,4 +10,13 @@ module.exports = (app) => {
 
   const cartRoutes = require("./carts.routes");
   app.use("/carts", cartRoutes);
+
+  const productDetailsRoutes = require("./productDetails.routes");
+  app.use("/products", productDetailsRoutes);
+
+  const userRoutes = require("./users.routes");
+  app.use("/users", userRoutes);
+
+  const cuponRoutes = require("./cupons.routes");
+  app.use("/cupons", cuponRoutes);
 };

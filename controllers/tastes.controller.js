@@ -1,5 +1,7 @@
 const { Op, where, and } = require("sequelize");
 const db = require("../models/index.model");
+const tastesModel = require("../models/tastes.model");
+const categorieModel = require("../models/categories.model");
 const IceCreamTaste = db.iceCreamTastes;
 
 // Crear un nuevo gusto de helado.
@@ -80,6 +82,27 @@ exports.list = (req, res) => {
   const text = req.query.filtro;
   const categories = req.query.categories;
   const productTypes = req.query.productTypes;
+  const order = req.query.order;
+
+  let orderBy = [];
+  if (order && order.length > 0) {
+    if (order == "categorie") {
+      orderBy.push([
+        db.iceCreamTastes.associations.category,
+        "description",
+        "ASC",
+      ]);
+    } else if (order == "productType") {
+      orderBy.push([
+        db.iceCreamTastes.associations.productType,
+        "description",
+        "ASC",
+      ]);
+    } else {
+      orderBy.push([order, "ASC"]);
+    }
+    console.log("Ordenando por: ", order);
+  }
 
   console.log("llega a lista", productTypes);
 
@@ -124,6 +147,7 @@ exports.list = (req, res) => {
     ],
     offset: (pagina - 1) * cantidad,
     limit: cantidad,
+    order: orderBy,
   })
     .then((tastes) => {
       res.status(200).json({
@@ -148,6 +172,14 @@ exports.list = (req, res) => {
 exports.getOneTaste = (req, res) => {
   const id = req.params.id;
   IceCreamTaste.findOne({
+    include: [
+      {
+        model: db.categories,
+      },
+      {
+        model: db.productTypes,
+      },
+    ],
     where: { id: id },
   })
     .then((tasteData) => {
