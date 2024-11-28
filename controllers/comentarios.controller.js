@@ -89,10 +89,10 @@ exports.getOneComentario = (req, res) => {
     });
 };
 
-// Obtener comentarios de un producto especifico.
+// Obtener comentarios de un producto específico.
 exports.getComment = (req, res) => {
   const iceCreamTasteId = req.query.iceCreamTasteId;
-
+  console.log("id", iceCreamTasteId);
   if (!iceCreamTasteId || isNaN(iceCreamTasteId)) {
     return res.status(400).json({
       ok: false,
@@ -101,7 +101,7 @@ exports.getComment = (req, res) => {
     });
   }
 
-  cupon
+  comentario
     .findAll({
       where: {
         iceCreamTasteId: { [Op.eq]: iceCreamTasteId },
