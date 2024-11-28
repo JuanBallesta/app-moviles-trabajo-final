@@ -25,6 +25,7 @@ db.carts = require("./carts.model.js")(sequelize, Sequelize);
 db.productHasCart = require("./productHasCart.model.js")(sequelize, Sequelize);
 db.users = require("./users.model")(sequelize, Sequelize);
 db.cupons = require("./cupons.model")(sequelize, Sequelize);
+db.comentarios = require("./comentarios.model")(sequelize, Sequelize);
 
 // Relaciones entre modelos
 
@@ -35,6 +36,10 @@ db.iceCreamTastes.belongsTo(db.categories);
 // Un gusto de helado puede estar en muchos tipos de producto, y un producto puede tener muchos gustos de helados.
 db.productTypes.hasMany(db.iceCreamTastes);
 db.iceCreamTastes.belongsTo(db.productTypes);
+
+// Un producto puede tener muchos comentarios, y un comentario puede estar solo en un producto.
+db.iceCreamTastes.hasMany(db.comentarios);
+db.comentarios.belongsTo(db.iceCreamTastes);
 
 // Un producto puede estar muchos carritos, y un carrito puede tener muchos productos.
 db.iceCreamTastes.hasMany(db.productHasCart);

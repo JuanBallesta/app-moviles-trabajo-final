@@ -15,6 +15,8 @@ exports.createTaste = (req, res) => {
     stock,
     categorie,
     productType,
+    caracteristicas,
+    especificaciones,
   } = req.body;
   console.log(req.body);
   IceCreamTaste.create({
@@ -26,6 +28,8 @@ exports.createTaste = (req, res) => {
     stock: stock,
     categoryId: categorie,
     productTypeId: productType,
+    caracteristicas: caracteristicas,
+    especificaciones: especificaciones,
   })
     .then((register) => {
       res.status(201).json({
@@ -219,6 +223,8 @@ exports.updateTaste = (req, res) => {
     stock,
     categorie,
     productType,
+    caracteristicas,
+    especificaciones,
   } = req.body;
 
   IceCreamTaste.update(
@@ -231,6 +237,8 @@ exports.updateTaste = (req, res) => {
       stock: stock,
       categoryId: categorie,
       productTypeId: productType,
+      caracteristicas: caracteristicas,
+      especificaciones: especificaciones,
     },
     {
       where: { id: id },

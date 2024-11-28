@@ -19,4 +19,7 @@ module.exports = (app) => {
 
   const cuponRoutes = require("./cupons.routes");
   app.use("/cupons", cuponRoutes);
+
+  const comentarioRoutes = require("./comentarios.routes");
+  app.use("/comentarios", comentarioRoutes);
 };

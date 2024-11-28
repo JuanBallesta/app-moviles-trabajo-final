@@ -83,9 +83,9 @@ exports.getOneCupon = (req, res) => {
     });
 };
 
-// Obtener descuento por código promocional
+// Obtener cupon de descuento
 exports.getDiscount = (req, res) => {
-  const code = req.query.code; // Aseguramos que estamos usando 'code'
+  const code = req.query.code;
   if (!code || isNaN(code)) {
     return res.status(400).json({
       ok: false,
@@ -97,7 +97,7 @@ exports.getDiscount = (req, res) => {
   cupon
     .findOne({
       where: {
-        code: { [Op.eq]: code }, // Buscamos el cupón con el código proporcionado
+        code: { [Op.eq]: code },
       },
     })
     .then((cuponData) => {

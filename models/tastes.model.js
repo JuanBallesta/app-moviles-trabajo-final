@@ -25,6 +25,14 @@ module.exports = (sequelize, Sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    caracteristicas: {
+      type: DataTypes.STRING(200),
+      allowNull: true,
+    },
+    especificaciones: {
+      type: DataTypes.STRING(200),
+      allowNull: true,
+    },
   });
 
   return taste;
