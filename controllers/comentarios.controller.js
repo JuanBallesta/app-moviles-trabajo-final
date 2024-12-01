@@ -1,6 +1,5 @@
 const db = require("../models/index.model");
 const comentario = db.comentarios;
-const iceCreamTastes = db.iceCreamTastes;
 
 // Crear un nuevo comentario.
 exports.createComentario = (req, res) => {
@@ -89,24 +88,21 @@ exports.getOneComentario = (req, res) => {
     });
 };
 
-// Obtener comentarios de un producto específico.
+// Obtener comentarios de un producto específico
 exports.getComment = (req, res) => {
-  const iceCreamTasteId = req.query.iceCreamTasteId;
-  console.log("id", iceCreamTasteId);
-  if (!iceCreamTasteId || isNaN(iceCreamTasteId)) {
-    return res.status(400).json({
-      ok: false,
-      msg: "Error al obtener comentarios",
-      status: 400,
-    });
-  }
+  const _id = req.params.idProducto;
 
-  comentario
-    .findAll({
-      where: {
-        iceCreamTasteId: { [Op.eq]: iceCreamTasteId },
+  Comentarios.findAll({
+    where: { iceCreamTasteId: _id },
+    attributes: ["description", ["iceCreamTasteId", "IdProducto"]],
+    include: [
+      {
+        model: IceCreamTastes,
+        as: "productDetails", // Alias configurado en la relación
+        attributes: [["taste", "Producto"]],
       },
-    })
+    ],
+  })
     .then((comentarios) => {
       if (!comentarios.length) {
         return res.status(404).json({
@@ -115,6 +111,7 @@ exports.getComment = (req, res) => {
           status: 404,
         });
       }
+
       res.status(200).json({
         ok: true,
         msg: "Comentarios encontrados.",
@@ -123,7 +120,7 @@ exports.getComment = (req, res) => {
       });
     })
     .catch((error) => {
-      console.error("Error al obtener los comentarios:", error);
+      console.error("Error al obtener los comentarios:", error.message);
       res.status(500).json({
         ok: false,
         msg: "Error al procesar la solicitud.",
